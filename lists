@@ -18,81 +18,89 @@
 ######################################################
 
 # Settings
-LIST_ROOT = ~/lists
+LIST_ROOT=~/lists
+
+# Globals
+LIST=""
+LIST_ITEM=""
 
 # Functions
-
-create_list_folder () {
-
+init () {
+    mkdir -p ${LIST_ROOT}
 }
 
-new_list () {
-
+add () {
+    mkdir -p "${LIST_ROOT}/${LIST}"
+    if [ "${LIST_ITEM}" != "" ]; then
+        touch "${LIST_ROOT}/${LIST}/${LIST_ITEM}"
+    fi
 }
 
-new_list_item () {
-
+del () {
+    if [ "${LIST_ITEM}" = "" ]; then
+        rm -rf "${LIST_ROOT:?}/${LIST}"
+    else
+        rm "${LIST_ROOT}/${LIST}/${LIST_ITEM}"
+    fi
 }
 
-delete_list () {
+#rename () {
+#
+#}
 
+show () {
+    if [ "${LIST}" = "" ]; then
+        cd "${LIST_ROOT}" || return
+        tree --noreport -d
+    else
+        cd "${LIST_ROOT}/${LIST}" || return
+        tree --noreport
+    fi
 }
 
-delete_list_item () {
-
+finish () {
+    mv "${LIST_ROOT}/${LIST}/${LIST_ITEM}" "${LIST_ROOT}/${LIST}/.${LIST_ITEM}"
 }
 
-show_unfinished () {
-    tree --noreport --  ${LIST_ROOT}
+edit () {
+    $EDITOR "${LIST_ROOT}/${LIST}/${LIST_ITEM}"
 }
 
-show_unfinished_list () {
-
-}
-
-show_all () {
-
-}
-
-show_list () {
-
-}
-
-finish_item () {
-
-}
-
-rename_item () {
-
-}
-
-rename_list () {
-
-}
-
-edit_item () {
-
+show_help () {
+    echo "Following actions are available"
+    echo "init, add, show, finish, edit, del, show_help"
 }
 
 # Main functionality. Evaluates the given arguments.
 
 main () {
     local usage
-    usage="lists <action> [list] [listitem]"
+    usage="lists <action> [list] [listitem]. lists show_help for more."
     local action
-    local list
-    list=""
-    local list_item
-    list_item=""
+    action=${1}
+    LIST=${2}
+    LIST_ITEM=${3}
 
-    while getopts "ha:r:s:" opt; do
-        case $opt in
-            h )         echo "$usage" ;;
-            \? )        show_unfinished ;;
-                exit 1 ;;
-        esac
-    done
-    shift $((OPTIND - 1))
-
+    case $action in
+        init) init
+            ;;
+        add) add
+            ;;
+        del) del
+            ;;
+        show) show
+            ;;
+#        rename) rename
+#            ;;
+        finish) finish
+            ;;
+        edit) edit
+            ;;
+        help) show_help
+            ;;
+        *) show
+            echo "$usage"
+            ;;
+    esac
 }
 main "$@"

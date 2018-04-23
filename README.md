@@ -20,7 +20,7 @@ $ tree -a
      .learn for the test
      visit parents
 ```
-advantages:
+### advantages:
 - simple navigation with standard unix tools
 - platform compatible
 - easily usable even without any special tools
@@ -29,18 +29,20 @@ advantages:
 - should be simple enough to parse it for usage with different languages, platform and so on
 - can be synced via dropbox or similar, or even git/VCS
 
-TODO:
+### TODO:
+- show all list items
+- show list items of a specific list
+- show all unfinished list items
+- rename list item
+- rename list
+
+### DONE:
 - create list folder
 - create new list
 - create new list item
 - delete list
 - delete list item
 - show all lists
-- show all list items
-- show list items of a specific list
-- show all unfinished list items
-- show all unfinished list items of a specific
+- show all unfinished list items of a specific list
 - finish a list item
-- rename list item
-- rename list
-+ edit list item content
+- edit list item content
