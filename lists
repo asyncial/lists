@@ -1,0 +1,98 @@
+#! /bin/sh
+
+#####################################################
+# Name: lists
+#
+# Helper script the lists filesystem structure
+#
+# Usage: lists <action> [list] [listitem]
+#
+# Dependencies: tree
+#
+# Origin:
+# License:
+#
+# Version: 0.1
+# Author: tillm
+# Date of Creation: 2018-04-23
+######################################################
+
+# Settings
+LIST_ROOT = ~/lists
+
+# Functions
+
+create_list_folder () {
+
+}
+
+new_list () {
+
+}
+
+new_list_item () {
+
+}
+
+delete_list () {
+
+}
+
+delete_list_item () {
+
+}
+
+show_unfinished () {
+    tree --noreport --  ${LIST_ROOT}
+}
+
+show_unfinished_list () {
+
+}
+
+show_all () {
+
+}
+
+show_list () {
+
+}
+
+finish_item () {
+
+}
+
+rename_item () {
+
+}
+
+rename_list () {
+
+}
+
+edit_item () {
+
+}
+
+# Main functionality. Evaluates the given arguments.
+
+main () {
+    local usage
+    usage="lists <action> [list] [listitem]"
+    local action
+    local list
+    list=""
+    local list_item
+    list_item=""
+
+    while getopts "ha:r:s:" opt; do
+        case $opt in
+            h )         echo "$usage" ;;
+            \? )        show_unfinished ;;
+                exit 1 ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+}
+main "$@"
