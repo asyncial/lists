@@ -30,9 +30,6 @@ $ tree -a
 - can be synced via dropbox or similar, or even git/VCS
 
 ### TODO:
-- show all list items
-- show list items of a specific list
-- show all unfinished list items
 - rename list item
 - rename list
 
@@ -45,4 +42,7 @@ $ tree -a
 - show all lists
 - show all unfinished list items of a specific list
 - finish a list item
+- show all list items
+- show list items of a specific list
+- show all unfinished list items
 - edit list item content

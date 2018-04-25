@@ -19,10 +19,6 @@
 # Settings
 LIST_ROOT=~/lists
 
-# Globals
-LIST=""
-LIST_ITEM=""
-
 # Functions
 init () {
     mkdir -p ${LIST_ROOT}
@@ -48,12 +44,21 @@ del () {
 #}
 
 show () {
-    if [ "${LIST}" = "" ]; then
+    local tree_command
+    if [ "${LIST_ITEM}" = "all" ] || [ "${LIST}" = "all" ]; then
+        tree_command="tree --noreport -a"
+    else
+        tree_command="tree --noreport"
+    fi
+    if [ "${LIST}" = "" ] || [ "${LIST}" = "all" ]; then
         cd "${LIST_ROOT}" || return
-        tree --noreport -d
+        ${tree_command}
+    elif [ "${LIST}" = "lists" ]; then
+        cd "${LIST_ROOT}" || return
+        ${tree_command} -d
     else
         cd "${LIST_ROOT}/${LIST}" || return
-        tree --noreport
+        ${tree_command}
     fi
 }
 
@@ -65,16 +70,54 @@ edit () {
     $EDITOR "${LIST_ROOT}/${LIST}/${LIST_ITEM}"
 }
 
-show_help () {
-    echo "Following actions are available"
-    echo "init, add, show, finish, edit, del, show_help"
+help () {
+    case ${LIST} in
+        init) echo "This action should be executed first and only once. It creates the \
+necessary folder for this tool to work."
+            ;;
+        add) echo "This action adds a new list or a new item to a list. Example:"
+            echo "lists add todo                      Adds the list \"todo\"."
+            echo "lists add todo \"buy groceries\"      Adds \"buy groceries\" to the \
+list \"todo\"."
+            ;;
+        del) echo "This action deletes a existing list or an existing list item. Example:"
+            echo "lists del todo                      Deletes the list \"todo\", \
+including all of it's items."
+            echo "lists del todo \"buy groceries\"      Deletes the item \
+\"buy groceries\" from the list \"todo\"."
+            ;;
+        show) echo "This action shows your lists and list items. Example:"
+            echo "lists show                            Shows all lists and items."
+            echo "lists show lists                      Shows all lists."
+            echo "lists show todo                       Shows all items in \"todo\"."
+            echo "lists show all                        Shows all lists and all items, \
+including the finished ones."
+            echo "lists show todo all                   Shows all list items, including \
+including the finished ones, in \"todo\"."
+            ;;
+        finish) echo "This action marks a list item as finished. Example:"
+            echo "lists finish todo \"buy groceries\"   Marks \"buy groceries\" in \
+the list \"todo\" as finished."
+            ;;
+        edit) echo "This action opens a file to take notes about a specific list item. \
+Example:"
+            echo "lists edit todo \"buy groceries\"     Opens a text editor for you to \
+add additional comments and note to the item \"buy groceries\", for example a shopping \
+list."
+            ;;
+        *) echo "There are help topics for the following actions:"
+            echo "init, add, del, edit and finish"
+            echo "Open the desired help topic like this:"
+            echo "lists help <topic>"
+            ;;
+    esac
 }
 
 # Main functionality. Evaluates the given arguments.
 
 main () {
     local usage
-    usage="lists <action> [list] [listitem]. lists show_help for more."
+    usage="lists <action> [list] [listitem] [all]. lists help for more."
     local action
     action=${1}
     LIST=${2}
@@ -95,7 +138,7 @@ main () {
             ;;
         edit) edit
             ;;
-        help) show_help
+        help) help
             ;;
         *) show
             echo "$usage"
