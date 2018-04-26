@@ -29,10 +29,6 @@ $ tree -a
 - should be simple enough to parse it for usage with different languages, platform and so on
 - can be synced via dropbox or similar, or even git/VCS
 
-### TODO:
-- rename list item
-- rename list
-
 ### DONE:
 - create list folder
 - create new list
@@ -46,3 +42,5 @@ $ tree -a
 - show list items of a specific list
 - show all unfinished list items
 - edit list item content
+- rename list item
+- rename list

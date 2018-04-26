@@ -39,9 +39,15 @@ del () {
     fi
 }
 
-#rename () {
-#
-#}
+rename () {
+    if [ "${NEW_ITEM_NAME}" = "" ]; then
+        cd "${LIST_ROOT}" || return
+        mv "${LIST}" "${LIST_ITEM}"
+    else
+        cd "${LIST_ROOT}/${LIST}" || return
+        mv "${LIST_ITEM}" "${NEW_ITEM_NAME}"
+    fi
+}
 
 show () {
     local tree_command
@@ -105,8 +111,14 @@ Example:"
 add additional comments and note to the item \"buy groceries\", for example a shopping \
 list."
             ;;
+        rename) echo "This action renames a list or a list item. Example:"
+            echo "lists rename todo done                Rename the list \"todo\" to \
+\"done\""
+            echo "lists rename todo \"buy groceries\" \"buy candy\""
+            echo "      Renames the list item \"buy groceries\" to \"buy candy\""
+        ;;
         *) echo "There are help topics for the following actions:"
-            echo "init, add, del, edit and finish"
+            echo "init, add, del, edit, finish and rename"
             echo "Open the desired help topic like this:"
             echo "lists help <topic>"
             ;;
@@ -117,11 +129,12 @@ list."
 
 main () {
     local usage
-    usage="lists <action> [list] [listitem] [all]. lists help for more."
+    usage="lists <action> [list] [listitem] [all/new name]. lists help for more."
     local action
     action=${1}
     LIST=${2}
     LIST_ITEM=${3}
+    NEW_ITEM_NAME=${4}
 
     case $action in
         init) init
@@ -132,8 +145,8 @@ main () {
             ;;
         show) show
             ;;
-#        rename) rename
-#            ;;
+        rename) rename
+            ;;
         finish) finish
             ;;
         edit) edit
