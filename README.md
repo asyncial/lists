@@ -44,3 +44,8 @@ $ tree -a
 - edit list item content
 - rename list item
 - rename list
+
+### TODO:
+- man page
+- bash/zsh completion
+- maybe error handling
