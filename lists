@@ -11,73 +11,73 @@
 #
 # License: GPLv3
 #
-# Version: 0.2
+# Version: 0.3
 # Author: asyncial
 # Date of Creation: 2018-04-23
 ######################################################
 
 # Settings
-LIST_ROOT=~/lists
+LIST_ROOT=$HOME/doc/lists
 
 # Functions
 init () {
-    mkdir -p ${LIST_ROOT}
+    mkdir -p "$LIST_ROOT"
 }
 
 add () {
-    mkdir -p "${LIST_ROOT}/${LIST}"
-    if [ "${LIST_ITEM}" != "" ]; then
-        touch "${LIST_ROOT}/${LIST}/${LIST_ITEM}"
+    mkdir -p "$LIST_ROOT/$LIST"
+    if [ "$LIST_ITEM" != "" ]; then
+        touch "$LIST_ROOT/$LIST/$LIST_ITEM"
     fi
 }
 
 del () {
-    if [ "${LIST_ITEM}" = "" ]; then
-        rm -rf "${LIST_ROOT:?}/${LIST}"
+    if [ "$LIST_ITEM" = "" ]; then
+        rm -rf "${LIST_ROOT:?}/$LIST"
     else
-        rm "${LIST_ROOT}/${LIST}/${LIST_ITEM}"
+        rm "$LIST_ROOT/$LIST/$LIST_ITEM"
     fi
 }
 
 rename () {
-    if [ "${NEW_ITEM_NAME}" = "" ]; then
-        cd "${LIST_ROOT}" || return
-        mv "${LIST}" "${LIST_ITEM}"
+    if [ "$NEW_ITEM_NAME" = "" ]; then
+        cd "$LIST_ROOT" || return
+        mv "$LIST" "$LIST_ITEM"
     else
-        cd "${LIST_ROOT}/${LIST}" || return
-        mv "${LIST_ITEM}" "${NEW_ITEM_NAME}"
+        cd "$LIST_ROOT/$LIST" || return
+        mv "$LIST_ITEM" "$NEW_ITEM_NAME"
     fi
 }
 
 show () {
     local tree_command
-    if [ "${LIST_ITEM}" = "all" ] || [ "${LIST}" = "all" ]; then
+    if [ "$LIST_ITEM" = "all" ] || [ "$LIST" = "all" ]; then
         tree_command="tree --noreport -a"
     else
         tree_command="tree --noreport"
     fi
-    if [ "${LIST}" = "" ] || [ "${LIST}" = "all" ]; then
-        cd "${LIST_ROOT}" || return
-        ${tree_command}
-    elif [ "${LIST}" = "lists" ]; then
-        cd "${LIST_ROOT}" || return
+    if [ "$LIST" = "" ] || [ "$LIST" = "all" ]; then
+        cd "$LIST_ROOT" || return
+        $tree_command
+    elif [ "$LIST" = "lists" ]; then
+        cd "$LIST_ROOT" || return
         ${tree_command} -d
     else
-        cd "${LIST_ROOT}/${LIST}" || return
-        ${tree_command}
+        cd "$LIST_ROOT/$LIST" || return
+        $tree_command
     fi
 }
 
 finish () {
-    mv "${LIST_ROOT}/${LIST}/${LIST_ITEM}" "${LIST_ROOT}/${LIST}/.${LIST_ITEM}"
+    mv "$LIST_ROOT/$LIST/$LIST_ITEM" "$LIST_ROOT/$LIST/.$LIST_ITEM"
 }
 
 edit () {
-    $EDITOR "${LIST_ROOT}/${LIST}/${LIST_ITEM}"
+    $EDITOR "$LIST_ROOT/$LIST/$LIST_ITEM"
 }
 
 help () {
-    case ${LIST} in
+    case $LIST in
         init) echo "This action should be executed first and only once. It creates the \
 necessary folder for this tool to work."
             ;;
@@ -118,7 +118,7 @@ list."
             echo "      Renames the list item \"buy groceries\" to \"buy candy\""
         ;;
         *) echo "There are help topics for the following actions:"
-            echo "init, add, del, edit, finish and rename"
+            echo "init, add, del, edit, finish, show and rename"
             echo "Open the desired help topic like this:"
             echo "lists help <topic>"
             ;;
@@ -129,12 +129,12 @@ list."
 
 main () {
     local usage
-    usage="lists <action> [list] [listitem] [all/new name]. lists help for more."
+    usage="$(basename "$0") <action> [list] [listitem] [all/new name]. $(basename "$0") help for more."
     local action
-    action=${1}
-    LIST=${2}
-    LIST_ITEM=${3}
-    NEW_ITEM_NAME=${4}
+    action=$1
+    LIST=$2
+    LIST_ITEM=$3
+    NEW_ITEM_NAME=$4
 
     case $action in
         init) init
