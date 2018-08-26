@@ -1,0 +1,84 @@
+#! /bin/sh
+
+#####################################################
+# Name: lists_to_html
+#
+# <Description>
+#
+# Usage:
+#
+# License:
+#
+# Version: 0.1
+# Author: asyncial
+# Date of Creation: 2018-08-26
+######################################################
+
+# Settings
+
+LIST_ROOT=$HOME/doc/lists
+
+# Functions
+
+# print the header needed for every page
+page_header () {
+    cat <<- EOF
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>lists</title>
+    </head>
+    <body>
+EOF
+}
+
+# print the footer needed for every page
+page_footer () {
+    cat <<- EOF
+        </ul>
+    </body>
+</html>
+EOF
+}
+
+# show all available lists
+overview_page () {
+    page_header > index.html
+
+    echo "<h2>lists</h2>" >> index.html
+
+    echo "<ul>" >> index.html
+
+    for list in "$LIST_ROOT"/*; do
+        if [ -d "$list" ] ; then
+            echo "<li><a href='$(basename "$list").html'>$(basename "$list")</a></li>" >> index.html
+            list_page "$list"
+        fi
+    done
+
+    page_footer >> index.html
+}
+
+# show the items of a list
+list_page () {
+    page_header > "$(basename "$1").html"
+
+    echo "<h2>$(basename "$1")</h2>" >> "$(basename "$1").html"
+
+    echo "<ul>" >> "$(basename "$1").html"
+
+    for item in "$LIST_ROOT"/"$(basename "$1")"/*; do
+        echo "<li><a href='$(basename "$item").html'>$(basename "$item")</a></li>" >> "$(basename "$1").html"
+        markdown -html5 -o "$(basename "$item").html" "$item"
+    done
+
+    page_footer >> "$(basename "$1").html"
+}
+
+# Main functionality. Evaluates the given arguments.
+
+main () {
+    overview_page
+}
+main "$@"

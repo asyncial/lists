@@ -44,6 +44,7 @@ $ tree -a
 - edit list item content
 - rename list item
 - rename list
+- a simple html representation of the whole thing
 
 ### TODO:
 - man page
